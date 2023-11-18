@@ -2,11 +2,11 @@ module github.com/icankeep/awesome_alfred
 
 go 1.21
 
-replace github.com/icankeep/simplego => ../simplego
+//replace github.com/icankeep/simplego => ../simplego
 
 require (
 	github.com/deanishe/awgo v0.29.1
-	github.com/icankeep/simplego v0.0.0-20231118102631-a0f250a27b42
+	github.com/icankeep/simplego v0.0.0-20231118141338-fd5026389765
 )
 
 require (

@@ -31,7 +31,7 @@ if [ "$IDE_TYPE" == "PyCharm" ]; then
   fi
 fi
 
-if [ "$IDE_TYPE" == "Idea" ]; then
+if [ "$IDE_TYPE" == "IntelliJIdea" ]; then
   if [ -f $IDEA_GLOBAL_BIN ]; then
     $IDEA_GLOBAL_BIN "$PROJECT_PATH"
   elif [ -f $IDEA_MAC_BIN ]; then
