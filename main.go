@@ -1,6 +1,11 @@
 package main
 
-import aw "github.com/deanishe/awgo"
+import (
+	aw "github.com/deanishe/awgo"
+	"github.com/icankeep/awesome_alfred/internal/jetbrains"
+	jetbrains_util "github.com/icankeep/simplego/external/jetbrains"
+	"os"
+)
 
 // Workflow is the main API
 var wf *aw.Workflow
@@ -14,13 +19,12 @@ func init() {
 
 // Your workflow starts here
 func run() {
-	// Add a "Script Filter" result
-	wf.NewItem("First result!")
-	// Send results to Alfred
-	wf.SendFeedback()
+	jetbrains.Run(wf, jetbrains_util.IDEType(os.Args[1]))
 }
 
 func main() {
+	// parse command line arguments
+
 	// Wrap your entry point with Run() to catch and log panics and
 	// show an error in Alfred instead of silently dying
 	wf.Run(run)
