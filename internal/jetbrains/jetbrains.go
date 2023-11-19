@@ -1,23 +1,29 @@
 package jetbrains
 
 import (
-	aw "github.com/deanishe/awgo"
-	jetbrains_util "github.com/icankeep/simplego/external/jetbrains"
+	"fmt"
+	"github.com/icankeep/awesome_alfred/internal/workflow"
+	"github.com/icankeep/simplego/external/jetbrains"
 )
 
-func GetRecentObjects() {
+var Action = workflow.GetActionFunc(&handler{}, true, false)
+
+type handler struct{}
+
+func (h *handler) FetchNewest(ctx *workflow.Context) error {
+	return nil
 }
 
-func Run(wf *aw.Workflow, ideType jetbrains_util.IDEType) {
-	defer wf.SendFeedback()
-	projects, err := jetbrains_util.GetRecentProjects(ideType)
+func (h *handler) BuildItems(ctx *workflow.Context) error {
+	ideType := ctx.GetStringFlag("ide")
+	projects, err := jetbrains.GetRecentProjects(jetbrains.IDEType(ideType))
 	if err != nil {
-		wf.NewItem("Get recent projects failed").Subtitle(err.Error())
-		//wf.SendFeedback()
-		return
+		return fmt.Errorf("failed to get recent projects, error: %v", err)
 	}
 
 	for _, project := range projects {
-		wf.NewItem(project.Name).Subtitle(project.Dir).Arg(project.Dir).Valid(true)
+		ctx.NewItem(project.Name).Subtitle(project.Dir).Var("IDE_TYPE", ideType).
+			Var("PROJECT_DIR", project.Dir).Valid(true)
 	}
+	return nil
 }

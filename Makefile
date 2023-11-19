@@ -1,7 +1,7 @@
 DIR:=~/Library/Application\ Support/Alfred/Alfred.alfredpreferences/workflows/user.workflow.1C475E18-41CE-49A8-A48B-DB23DD816F2E
 
 build:
-	go build -o bin/awesome_alfred
+	go build -o bin/aw
 
 release: build
 	chmod +x bin/*
@@ -10,7 +10,7 @@ test:
 	go test -v ./...
 
 quick-run:
-	./bin/awesome_alfred
+	./bin/aw
 
 run: release quick-run
 

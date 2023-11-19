@@ -1,31 +1,24 @@
 package main
 
 import (
-	aw "github.com/deanishe/awgo"
-	"github.com/icankeep/awesome_alfred/internal/jetbrains"
-	jetbrains_util "github.com/icankeep/simplego/external/jetbrains"
+	"github.com/icankeep/awesome_alfred/internal"
+	"github.com/urfave/cli/v2"
+	"log"
 	"os"
 )
-
-// Workflow is the main API
-var wf *aw.Workflow
-
-func init() {
-	// Create a new Workflow using default settings.
-	// Critical settings are provided by Alfred via environment variables,
-	// so this *will* die in flames if not run in an Alfred-like environment.
-	wf = aw.New()
-}
-
-// Your workflow starts here
-func run() {
-	jetbrains.Run(wf, jetbrains_util.IDEType(os.Args[1]))
-}
 
 func main() {
 	// parse command line arguments
 
 	// Wrap your entry point with Run() to catch and log panics and
 	// show an error in Alfred instead of silently dying
-	wf.Run(run)
+
+	var app = &cli.App{
+		Name:     "aw",
+		Usage:    "",
+		Commands: internal.GetCommands(),
+	}
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
 }
