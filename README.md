@@ -16,8 +16,10 @@ For more help, please refer to the [official documentation](https://www.alfredap
 1. Quick open project with the products of JetBrains
 - gl
 ![](doc/imgs/gl.png)
+
 - charm
 ![](doc/imgs/charm.png)
+
 - idea
 ![](doc/imgs/idea.png)
 
