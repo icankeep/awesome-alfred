@@ -15,16 +15,20 @@ For more help, please refer to the [official documentation](https://www.alfredap
 ## Example
 1. Quick open project with the products of JetBrains
 - gl
+
 ![](doc/imgs/gl.png)
 
 - charm
+
 ![](doc/imgs/charm.png)
 
 - idea
+
 ![](doc/imgs/idea.png)
 
 2. Quick clone and open project with the products of JetBrains
 - clone
+
 ![img.png](doc/imgs/clone.png)
 
 3. Coming soon...
