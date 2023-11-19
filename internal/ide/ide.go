@@ -1,9 +1,8 @@
-package jetbrains
+package ide
 
 import (
-	"fmt"
 	"github.com/icankeep/awesome_alfred/internal/workflow"
-	"github.com/icankeep/simplego/external/jetbrains"
+	"github.com/icankeep/simplego/external/ide"
 )
 
 var Action = workflow.GetActionFunc(&handler{}, true, false)
@@ -15,10 +14,15 @@ func (h *handler) FetchNewest(ctx *workflow.Context) error {
 }
 
 func (h *handler) BuildItems(ctx *workflow.Context) error {
+	var projects []*ide.Project
+
 	ideType := ctx.GetStringFlag("ide")
-	projects, err := jetbrains.GetRecentProjects(jetbrains.IDEType(ideType))
+	projects, err := ide.GetRecentProjects(ideType)
 	if err != nil {
-		return fmt.Errorf("failed to get recent projects, error: %v", err)
+		return err
+	}
+	if len(projects) == 0 {
+		ctx.NewItem("Not Found Project, Type: " + ideType).Valid(false)
 	}
 
 	for _, project := range projects {

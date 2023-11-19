@@ -50,6 +50,10 @@ function export_env(){
   "Writerside")
     find_and_export_app_path "Writerside" "writerside"
   ;;
+  "VsCode")
+    find_and_export_app_path "Visual Studio Code" "code"
+    export MAC_BIN="/usr/local/bin/code"
+  ;;
   esac
 }
 
@@ -60,11 +64,11 @@ function err(){
 }
 
 function find_and_export_app_path() {
-  _find_and_export_app_path $1 $2 "/Applications"
-  if [ -z $EXEC_APP ] || [ ! -d $EXEC_APP ]; then
-    _find_and_export_app_path $1 $2 "$HOME/Applications"
+  _find_and_export_app_path "$1" "$2" "/Applications"
+  if [ -z "$EXEC_APP" ] || [ ! -d "$EXEC_APP" ]; then
+    _find_and_export_app_path "$1" "$2" "$HOME/Applications"
   fi
-  if [ -z $EXEC_APP ] || [ ! -d $EXEC_APP ]; then
+  if [ -z "$EXEC_APP" ] || [ ! -d "$EXEC_APP" ]; then
     err "ERR: NOT FOUND $app_prefix"
     exit 1
   fi
@@ -84,7 +88,7 @@ function _find_and_export_app_path() {
 
   EXEC_APP="$app_base_dir/$app_name"
   MAC_BIN="$EXEC_APP/Contents/MacOS/$app_bin_name"
-  if [ -z $app_name ] || [ ! -d "$EXEC_APP" ]; then
+  if [ -z "$app_name" ] || [ ! -d "$EXEC_APP" ]; then
     export EXEC_APP=""
     export MAC_BIN=""
   fi
