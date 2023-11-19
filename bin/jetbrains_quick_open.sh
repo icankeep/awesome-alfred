@@ -47,6 +47,9 @@ function export_env(){
   "AppCode")
     find_and_export_app_path "AppCode" "appcode"
   ;;
+  "Writerside")
+    find_and_export_app_path "Writerside" "writerside"
+  ;;
   esac
 }
 
@@ -57,21 +60,33 @@ function err(){
 }
 
 function find_and_export_app_path() {
-  export BASE_APP_DIR="/Applications"
+  _find_and_export_app_path $1 $2 "/Applications"
+  if [ -z $EXEC_APP ] || [ ! -d $EXEC_APP ]; then
+    _find_and_export_app_path $1 $2 "$HOME/Applications"
+  fi
+  if [ -z $EXEC_APP ] || [ ! -d $EXEC_APP ]; then
+    err "ERR: NOT FOUND $app_prefix"
+    exit 1
+  fi
+}
+
+function _find_and_export_app_path() {
   app_prefix=$1
   app_bin_name=$2
+  app_base_dir=$3
+  app_name=$(ls "$app_base_dir" | grep "$app_prefix" | sort -rn | head -1)
 
-  export EXEC_APP="$BASE_APP_DIR/$app_prefix.app"
+  export EXEC_APP="$app_base_dir/$app_prefix.app"
   export MAC_BIN="$EXEC_APP/Contents/MacOS/$app_bin_name"
   if [ -d "$EXEC_APP" ] && [ -f "$MAC_BIN" ]; then
     return
   fi
 
-  EXEC_APP="$BASE_APP_DIR/$(ls "$BASE_APP_DIR" | grep "$app_prefix" | sort -rn | head -1)"
+  EXEC_APP="$app_base_dir/$app_name"
   MAC_BIN="$EXEC_APP/Contents/MacOS/$app_bin_name"
-  if [ ! -d "$EXEC_APP" ]; then
-    err "ERR: NOT FOUND $app_prefix"
-    exit 1
+  if [ -z $app_name ] || [ ! -d "$EXEC_APP" ]; then
+    export EXEC_APP=""
+    export MAC_BIN=""
   fi
 }
 
