@@ -1,8 +1,9 @@
 #!/bin/bash
+export IDE_TYPE=$1
+export PROJECT_PATH=$2
 
 function export_env(){
-  export IDE_TYPE=$1
-  export PROJECT_PATH=$2
+#  [[ -f $HOME/.zshrc ]] && source "$HOME/.zshrc" || [[ -f $HOME/.bashrc ]] && source "$HOME/.bashrc"
 
   case "$IDE_TYPE" in
   "GoLand")
@@ -57,6 +58,28 @@ function export_env(){
   esac
 }
 
+function clone_project_if_need(){
+  if [[ $PROJECT_PATH == git@* ]]; then
+    REPO_PREFIX=$(echo "$PROJECT_PATH" | cut -d@ -f2 | cut -d/ -f1)
+    REPO_NAME=$(echo "$PROJECT_PATH" | cut -d/ -f2 | cut -d. -f1)
+
+    export CLONE_ROOT_DIR=$HOME/$IDE_TYPE"Projects"
+
+    if [[ $IDE_TYPE == "GoLand" ]]; then
+      DOMAIN=$(echo "$REPO_PREFIX" | cut -d: -f1)
+      SUB_DOMAIN=$(echo "$REPO_PREFIX" | cut -d: -f2)
+      export CLONE_ROOT_DIR=$GOPATH/src/$DOMAIN/$SUB_DOMAIN
+    fi
+
+    export CLONE_DIR=$CLONE_ROOT_DIR/$REPO_NAME
+    if [[ ! -d $CLONE_DIR ]]; then
+      mkdir -p "$CLONE_DIR"
+      git clone "$PROJECT_PATH" "$CLONE_DIR"
+    fi
+    export PROJECT_PATH=$CLONE_DIR
+  fi
+}
+
 function err(){
   export ERR=1
   export ERR_MSG=$1
@@ -101,5 +124,6 @@ function open_project(){
   fi
 }
 
-export_env "$1" "$2"
+export_env
+clone_project_if_need
 open_project
